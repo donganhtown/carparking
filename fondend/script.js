@@ -39,7 +39,6 @@ function renderSpots(data) {
             div.dataset.owner = spot.owner || "Chưa rõ";
             div.dataset.type = spot.type || "Không xác định";
 
-            // Tooltip hiển thị tự động khi hover
             if (spot.status === "occupied") {
                 const tooltip = document.createElement("div");
                 tooltip.classList.add("date-tooltip");
@@ -52,7 +51,6 @@ function renderSpots(data) {
                 div.appendChild(tooltip);
             }
 
-            // Click hiển thị thông tin
             div.addEventListener("click", () => {
                 const info = `📍 Khu: ${spot.area}\n🅿️ Vị trí: ${spot.position}\n🚗 Biển số: ${spot.plate}\n👤 Chủ xe: ${spot.owner}\n🚙 Loại xe: ${spot.type}`;
                 alert(info);
@@ -108,4 +106,50 @@ async function removeSelectedVehicle() {
     const data = await res.json();
     alert(data.message || "Đã xóa phương tiện!");
     await loadSpots();
+}
+
+document.getElementById("viewEntryTimeBtn").addEventListener("click", () => {
+    const index = document.getElementById("removeIndex").value;
+    if (!index || index < 1 || index > 9) {
+        alert("Vui lòng nhập vị trí hợp lệ (1-9)");
+        return;
+    }
+
+    fetch("http://localhost:3000/api/spots")
+        .then(res => res.json())
+        .then(data => {
+            const selectedSpot = data.find(s => s.position == index);
+            if (!selectedSpot || !selectedSpot.entry_time) {
+                alert("🚫 Không có xe hoặc chưa có thời gian gửi xe.");
+            } else {
+                const entryDate = new Date(selectedSpot.entry_time).toLocaleString("vi-VN");
+                alert(`📅 Xe được gửi vào lúc: ${entryDate}`);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Lỗi khi tải dữ liệu thời gian gửi xe.");
+        });
+});
+
+async function searchVehicle() {
+    const query = document.getElementById("searchVehicle").value.trim();
+    if (!query) {
+        alert("Vui lòng nhập biển số hoặc chủ xe để tìm kiếm!");
+        return;
+    }
+
+    const res = await fetch(`http://localhost:3000/api/search?query=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    if (data.length === 0) {
+        alert("Không tìm thấy xe phù hợp!");
+        return;
+    }
+
+    const results = data.map(spot => 
+        `📍 Khu: ${spot.area}\n🅿️ Vị trí: ${spot.position}\n🚗 Biển số: ${spot.plate}\n👤 Chủ xe: ${spot.owner}\n🚙 Loại xe: ${spot.type}`
+    ).join("\n\n");
+
+    alert(`Kết quả tìm kiếm:\n\n${results}`);
 }

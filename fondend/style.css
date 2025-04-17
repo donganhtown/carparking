@@ -53,6 +53,22 @@ h1 {
     background-color: #0d47a1;
 }
 
+.chart-link, .back-link {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.chart-link:hover, .back-link:hover {
+    background-color: #388e3c;
+}
+
 .parking-area {
     width: 75%;
     display: grid;
@@ -117,4 +133,46 @@ h1 {
 
 .parking-spot:hover .date-tooltip {
     display: block;
+}
+
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.chart-section {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 1px 8px rgba(0,0,0,0.1);
+    padding: 15px;
+}
+
+.chart-section h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.ct-vehicles-chart .ct-bar {
+    stroke: #1976d2;
+    stroke-width: 20px;
+}
+
+.ct-vehicle-types-chart .ct-series-a .ct-slice-pie {
+    fill: #1976d2;
+}
+
+.ct-vehicle-types-chart .ct-series-b .ct-slice-pie {
+    fill: #0d47a1;
+}
+
+.ct-users-chart .ct-bar {
+    stroke: #4caf50;
+    stroke-width: 15px;
+}
+
+.ct-activity-chart .ct-line {
+    stroke: #d81b60;
+    stroke-width: 2px;
 }
